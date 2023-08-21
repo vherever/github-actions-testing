@@ -1,4 +1,4 @@
-name: Weather Application
+name: Github Actions Testing
 
 on:
   push:
@@ -18,11 +18,11 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Install and build
-        working-directory: ./src
-        run: npm install && npm run build && cp dist/weather-app/index.html dist/weather-app/404.html
+        working-directory: ./
+        run: npm install && npm run build && cp dist/github-actions-testing/index.html dist/github-actions-testing/404.html
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: dist/weather-app # The folder the action should deploy.
+          folder: dist/github-actions-testing # The folder the action should deploy.
