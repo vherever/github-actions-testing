@@ -6,23 +6,30 @@ on:
       - "master"
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.19]
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
-      - name: Install and build
-        working-directory: ./
-        run: npm install && npm run build && cp dist/github-actions-testing/index.html dist/github-actions-testing/404.html
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: [16.19]
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.1
+        if: success()
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: dist/github-actions-testing # The folder the action should deploy.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/angular-github-actions
+          enable_jekyll: true
